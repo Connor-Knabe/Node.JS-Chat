@@ -1,0 +1,31 @@
+<html>
+<head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		var socket = io.connect('/');
+		$(function(){
+			$("#message").keypress(function(e){
+				if(e.which == 13){
+					var message = $(this).val();
+					console.log(message);
+					$(this).val("");
+					$(this).attr("placeholder","Type a message");
+					socket.emit('message',{message: message});
+				}
+			})
+		});
+		socket.on('message',function(info){
+			$("#messages").prepend("<div><b>"+info.name+"</b>: "+info.message+"</div>");
+		});
+	</script>
+</head>
+<body>
+	<h1>Real-time chat</h1>
+	<input placeholder = "Type your name" type ="text" id="message">
+	<div id = "messages"></div>
+	{{#messages}}
+	<div><b>{{name}}: </b>{{message}}</div>
+	{{/messages}}
+</body>
+</html>
