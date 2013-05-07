@@ -2,7 +2,8 @@ var express = require('express')
 , path = require('path')
 , app = express()
 , server = require('http').createServer(app)
-, io = require('socket.io').listen(server);
+, io = require('socket.io').listen(server)
+, sanitize = require('sanitizer');
 
 //configure sockets
 server.listen(process.env.PORT || 3000);
@@ -27,6 +28,8 @@ var messages = [];
 io.sockets.on('connection', function (socket) { //new socket connection established
   console.log("socket connected");
   socket.on('message',function(info){
+    info.message = sanitize.escape(info.message);
+
   	socket.get("name",function(err,name){
   	if(!name){
   		socket.set("name",info.message);
