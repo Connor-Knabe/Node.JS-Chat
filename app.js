@@ -35,7 +35,7 @@ io.sockets.on('connection', function (socket) { //new socket connection establis
   		socket.set("name",info.message);
   	}else{
       console.log(messages);
-    messages.push({name: name, message: info.message});
+    messages.unshift({name: name, message: info.message});
   	io.sockets.emit('message',{message: info.message,name: name});
   	}
   	});
